@@ -49,10 +49,3 @@
 2. Open in VS Code with PlatformIO
 
 
-
-&#x20;    -D TOUCH\_MISO=6
-
-&#x20;    -D TOUCH\_MOSI=4
-
-&#x20;    -D TOUCH\_IRQ=1
-
