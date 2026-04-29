@@ -59,7 +59,7 @@ Images must be:
 /3.jpg
 ...
 
-###⚠️ Important
+### ⚠️ Important
 - Use baseline JPEG
 - Avoid progressive JPEG (may fail decoding)
 - Keep file size ~100KB–200KB for best performance
