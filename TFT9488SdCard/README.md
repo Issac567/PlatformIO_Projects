@@ -8,7 +8,7 @@ Built and tested using **PlatformIO in VS Code**.
 
 ## 🚀 Features
 
-- ESP32-based JPEG slideshow
+- ESP32 S3-based JPEG slideshow
 - ILI9488 480x320 TFT display
 - SD card JPEG loading
 - Separate SPI buses (TFT + SD independent)
@@ -25,7 +25,7 @@ Built and tested using **PlatformIO in VS Code**.
 
 ## 🧠 Hardware Used
 
-- ESP32 (any compatible board)
+- ESP32 S3 (any compatible board)
 - ILI9488 TFT display (480x320)
 - MicroSD card module
 - SD card (FAT32 formatted)
@@ -35,7 +35,7 @@ Built and tested using **PlatformIO in VS Code**.
 ## 🔌 SPI Configuration
 
 ### TFT Display (SPI1 / default bus)
-Handled by `TFT_eSPI` library configuration (`User_Setup.h`)
+Handled by `TFT_eSPI` library configuration (`Platformio.ini`)
 
 ### SD Card (Separate SPI bus)
 Custom SPI instance:
@@ -70,6 +70,7 @@ Images must be:
 ## 🖼️ Image Preparation
 
 Use any online resizer:
+* https://www.photopea.com/
 
 Recommended settings:
 
@@ -80,7 +81,7 @@ Recommended settings:
 ---
 
 ## ⚙️ How It Works
-ESP32 initializes TFT display
+ESP32 S3 initializes TFT display
 SD card is mounted using separate SPI bus
 Program checks /1.jpg
 Loads images sequentially:
