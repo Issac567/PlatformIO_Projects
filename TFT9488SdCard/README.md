@@ -40,10 +40,8 @@ Handled by `TFT_eSPI` library configuration (`Platformio.ini`)
 ### SD Card (Separate SPI bus)
 Custom SPI instance:
 
-```cpp
 SPIClass sdSPI(HSPI);
 sdSPI.begin(SD_SCK, SD_MISO, SD_MOSI, SD_CS);
-...
 
 This prevents SPI conflicts between TFT and SD card.
 
@@ -59,7 +57,7 @@ Images must be:
 /1.jpg
 /2.jpg
 /3.jpg
-
+...
 
 ###⚠️ Important
 - Use baseline JPEG
