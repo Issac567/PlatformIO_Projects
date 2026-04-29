@@ -41,16 +41,7 @@
 
 1. Clone the repository
 2. Open in VS Code with PlatformIO
-3. Configure your `platformio.ini`:
 
-```ini
-build_flags =
-  -D USER_SETUP_LOADED=1
-  -D ILI9488_DRIVER=1
-  -D TOUCH_CS=15
-  -D SD_CS=21
-  -D TOUCH_SCLK=5
-```
 
 
 &#x20;    -D TOUCH\_MISO=6
