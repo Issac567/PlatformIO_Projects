@@ -92,10 +92,10 @@ When no next image → resets to /1.jpg
 ---
 
 ## 🧩 Libraries Used
-TFT_eSPI
-JPEGDecoder
-SD
-SPI (ESP32 core)
+* TFT_eSPI
+* JPEGDecoder
+* SD
+* SPI (ESP32 core)
 
 ---
 
