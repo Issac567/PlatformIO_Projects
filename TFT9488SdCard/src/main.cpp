@@ -11,11 +11,14 @@
  * DC:          2                       -> Data/Command
  * RST:        12                       -> Reset 
  * * --- TOUCH SENSOR OR/AND SD Card (Shared Bus 2: HSPI) ---
- * TOUCH_DIN:  4 (MOSI)                 -> Data In to XPT2046/SD Card
- * TOUCH_CLK:  5 (SCLK)                 -> Clock from ESP32 to XPT2046/SD Card
- * TOUCH_DO:   6 (MISO)                 -> Data Out from XPT2046/SD Card
+ * TOUCH_DIN:  4 (MOSI)                 -> Data In to XPT2046
+ * TOUCH_CLK:  5 (SCLK)                 -> Clock from ESP32 to XPT2046
+ * TOUCH_DO:   6 (MISO)                 -> Data Out from XPT2046
  * TOUCH_CS:   15                       -> Touch Chip Select
  * TOUCH_IRQ:   1                       -> Touch Interrupt (Active LOW)
+ * SD_MOSI      4                       -> Data In to SD Card
+ * SD_MISO      6                       -> Data Out from SD Card
+ * SD_SCK       5                       -> Clock from ESP32 to SD Card
  * SD_CS:      21                       -> SD Card Chip Select
  * * --- POWER & GROUND ---
  * VCC:    3.3V or 5V (Check Screen Regulator)
