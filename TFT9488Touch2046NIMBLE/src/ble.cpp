@@ -83,7 +83,7 @@ public:
             }
 
             myDevice = new NimBLEAdvertisedDevice(*advertisedDevice);
-            doScan = false;
+            doScan = true;
             doConnect = true;
             Serial.println("Ready to connect...");
         }
@@ -179,7 +179,7 @@ bool connectToServer()
 //-----------------------------------------------------------
 void bleDoScan() 
 {
-    doScan = true;
+    doScan = false;
 
     Serial.println("Starting Arduino NimBLE Client application...");
     NimBLEDevice::init("");
