@@ -4,7 +4,7 @@
 
 // Shared variables (extern from header)
 bool doConnect = false;
-bool doScan = false;
+bool doScan = true;
 
 NimBLEAdvertisedDevice* myDevice = nullptr;
 
