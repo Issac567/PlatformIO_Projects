@@ -83,7 +83,6 @@ public:
             }
 
             myDevice = new NimBLEAdvertisedDevice(*advertisedDevice);
-            doScan = true;
             doConnect = true;
             Serial.println("Ready to connect...");
         }
