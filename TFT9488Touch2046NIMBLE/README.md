@@ -1,4 +1,4 @@
-# 📺 ESP32-S3 TFT + Touch + BLE Project
+# 📺 ESP32-S3 + TFT + Touch + BLE Project
 
 ---
 
