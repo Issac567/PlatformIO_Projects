@@ -95,7 +95,8 @@ public:
 //-----------------------------------------------------------
 bool connectToServer() 
 {
-
+    doConnect = false;
+    
     // 1. Important to delete client or it will crash anytime you reconnect.
     if (pClient != nullptr) 
     {
@@ -170,7 +171,6 @@ bool connectToServer()
         return false;
     }
 
-    //doConnect = false;
     return true;
 }
 
