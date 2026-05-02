@@ -53,3 +53,8 @@
 
 1. Clone the repository
 2. Open in VS Code with PlatformIO
+
+---
+
+## Note
+* BT_Check is only functional.  You can experiment with BLE by powering on and off the HM-10 and checking the status.
