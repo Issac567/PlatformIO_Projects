@@ -1,8 +1,6 @@
 #ifndef DISPLAY_LOGIC_H
 #define DISPLAY_LOGIC_H
 
-//#include "globals.h"
-
 // UI Prototypes
 void handleTouch();
 void drawUI();

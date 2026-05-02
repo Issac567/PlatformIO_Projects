@@ -1,5 +1,4 @@
 #include <Arduino.h>
-//#include <NimBLEDevice.h>
 #include "ble.h"
 
 // Shared variables (extern from header)
@@ -14,21 +13,6 @@ static NimBLEUUID charUUID((uint16_t)0xFFE1);
 static NimBLEUUID serviceUUID("0000ffe0-0000-1000-8000-00805f9b34fb");
 static NimBLERemoteCharacteristic* pRemoteCharacteristic = nullptr;
 static NimBLEClient* pClient = nullptr;
-
-//-----------------------------------------------------------
-// Callback function to handle notifications
-//-----------------------------------------------------------
-static void notifyCallback(NimBLERemoteCharacteristic* pRemoteCharacteristic, uint8_t* pData, size_t length, bool isNotify) 
-{
-    Serial.print("Notify callback for characteristic ");
-    Serial.print(pRemoteCharacteristic->getUUID().toString().c_str());
-    Serial.print(" of data length ");
-    Serial.println(length);
-    Serial.print("data: ");
-    // NimBLE is very efficient; pData points directly to the received buffer
-    Serial.write(pData, length);
-    Serial.println();
-}
 
 //-----------------------------------------------------------
 //Connect/Disconnect event
@@ -49,9 +33,8 @@ class MyClientCallback : public NimBLEClientCallbacks
 //-----------------------------------------------------------
 // * Scan for BLE servers and find the first one that advertises the service we are looking for.
 //-----------------------------------------------------------
-class MyAdvertisedDeviceCallbacks : public NimBLEScanCallbacks {
-public:
-    
+class MyAdvertisedDeviceCallbacks : public NimBLEScanCallbacks 
+{
     void onResult(const NimBLEAdvertisedDevice* advertisedDevice) override {
         Serial.println("------------------------------");
         Serial.println("BLE Advertised Device found:");
@@ -82,7 +65,7 @@ public:
                 myDevice = nullptr;
             }
 
-            myDevice = new NimBLEAdvertisedDevice(*advertisedDevice);    
+            myDevice = new NimBLEAdvertisedDevice(*advertisedDevice);  
             doConnect = true;
             Serial.println("Ready to connect...");
         }
@@ -90,9 +73,24 @@ public:
 };
 
 //-----------------------------------------------------------
+// Callback function to handle notifications
+//-----------------------------------------------------------
+static void notifyCallback(NimBLERemoteCharacteristic* pRemoteCharacteristic, uint8_t* pData, size_t length, bool isNotify) 
+{
+    Serial.print("Notify callback for characteristic ");
+    Serial.print(pRemoteCharacteristic->getUUID().toString().c_str());
+    Serial.print(" of data length ");
+    Serial.println(length);
+    Serial.print("data: ");
+    // NimBLE is very efficient; pData points directly to the received buffer
+    Serial.write(pData, length);
+    Serial.println();
+}
+
+//-----------------------------------------------------------
 //Connection to server
 //-----------------------------------------------------------
-bool connectToServer() 
+bool bleconnectToServer() 
 {
     doConnect = false;          // prevent repeated attempts
 
@@ -123,6 +121,7 @@ bool connectToServer()
         NimBLEDevice::deleteClient(pClient);
         return false;
     }
+    pClient->updateConnParams(16, 32, 0, 100);  // 1 seconds timeout.  when powered off it takes 1 seconds to update the status of connection
     Serial.println(" - Connected to server");
     
     // 4. Obtain a reference to the service
@@ -145,6 +144,7 @@ bool connectToServer()
         pClient->disconnect();
         return false;
     }
+    Serial.println(" - Found our characteristic");
 
     // 6. Subscription Logic
     if (pRemoteCharacteristic->canNotify()) 
@@ -152,25 +152,19 @@ bool connectToServer()
         // NimBLE uses subscribe() instead of registerForNotify()
         // First param is true for notifications, false for indications
         if (pRemoteCharacteristic->subscribe(true, notifyCallback)) 
-        
         {
-        Serial.println(" - Subscribed to notifications");
-        } 
-        else 
-        {
-        Serial.println(" - Failed to subscribe");
-        pClient->disconnect();
-        return false;
+            Serial.println(" - Subscribed to notifications");
+        } else {
+            Serial.println(" - Failed to subscribe");
+            pClient->disconnect();
+            return false;
         }
-    }
-    else
-    {
+    } else {
         Serial.println(" - Characteristic does not support notifications");
         pClient->disconnect();
         return false;
     }
 
-    //doConnect = false;
     return true;
 }
 

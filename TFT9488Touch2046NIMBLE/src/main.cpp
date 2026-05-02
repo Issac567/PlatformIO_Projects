@@ -89,16 +89,18 @@ void loop() {
     // Update the state
     wasTouched = isCurrentlyTouched;
 
-    if (doConnect == true) {
-        if (connectToServer()) {
+    if (doConnect == true) 
+    {
+        if (bleconnectToServer()) {
             Serial.println("We are now connected to the BLE Server.");
         } else {
             Serial.println("We have failed to connect to the server; there is nothing more we will do.");
         }
-        doScan = true;    // make sure to reallow it but it wont trigger when connected!
+        doScan = true;    // make sure to reallow it but it wont trigger when connected!  
     }
 
-    if (!bleIsConnected() && doConnect == false && doScan == true) {
+    if (!bleIsConnected() && doConnect == false && doScan == true) 
+    {
         Serial.println("BLE is not connected, attempting to reconnect...");
         bleDoScan();
     }
