@@ -37,7 +37,7 @@ void drawUI()
         case MAIN:     drawMainMenu();    break;
         case FLASH:    drawFlashMenu();   break;
         case BT_CHECK: drawBTMenu();      break;
-        case CALIB:    drawCalibMenu();   break;
+        case CALIB:    drawSystemMenu();   break;
         case ABOUT:    drawAboutMenu();   break;
     }
 }
@@ -51,7 +51,7 @@ void drawMainMenu()
     // Grid: [Flash] [BT] / [Calib] [About]
     createButton(20,  60,  210, 110, TFT_RED,    "FLASH");
     createButton(250, 60,  210, 110, TFT_BLUE,   "CHECK BT");
-    createButton(20,  190, 210, 110, TFT_GREEN,  "CALIBRATION");
+    createButton(20,  190, 210, 110, TFT_GREEN,  "CHECK_SYS");
     createButton(250, 190, 210, 110, TFT_ORANGE, "ABOUT");
 }
 
@@ -95,17 +95,31 @@ void drawBTMenu()
     drawBackButton();
 }
 
-void drawCalibMenu() 
+void drawSystemMenu() 
 {
-    uint16_t calibrationData[5];
-
     tft.setTextColor(TFT_WHITE, TFT_BLACK);
-    //tft.calibrateTouch(calibrationData, TFT_WHITE, TFT_RED, 15);
+    tft.drawCentreString("System Check", 240, 20, 4);
+ 
+    // SD Card Check
+    if (checkSDMount() == true)
+    {
+        tft.setTextColor(TFT_GREEN, TFT_BLACK);
+        tft.drawString("[OK] SD Card Mount", 5, 80, 4);
+    } else {
+        tft.setTextColor(TFT_RED, TFT_BLACK);
+        tft.drawString("[Fail] SD Card Mount", 5, 80, 4);
+    }
 
+    // Touch 2046 Check
+    if (checkTouchMount() == true)
+    {
+        tft.setTextColor(TFT_GREEN, TFT_BLACK);
+        tft.drawString("[OK] Touch 2046", 5, 120, 4);
+    } else {
+        tft.setTextColor(TFT_RED, TFT_BLACK);
+        tft.drawString("[Fail] Touch 2046", 5, 120, 4);
+    }
     
-    tft.drawCentreString("TOUCH CALIBRATION", 240, 20, 4);
-    tft.drawCircle(40, 40, 10, TFT_WHITE); // Calibration points
-    tft.drawCentreString("Tap crosshairs to calibrate", 240, 160, 2);
     drawBackButton();
     
 }
@@ -114,12 +128,9 @@ void drawAboutMenu()
 {
     tft.setTextColor(TFT_WHITE, TFT_BLACK);
     tft.drawCentreString("ABOUT", 240, 20, 4);
-    tft.setCursor(60, 100);
-    tft.println("Firmware: v1.0");
-    tft.setCursor(60, 130);
-    tft.println("Engineer: Issac Engineer");
-    tft.setCursor(60, 160);
-    tft.println("Hardware: ESP32 + ILI9488");
+    tft.drawString("Firmware: v1.0", 5, 80, 2);
+    tft.drawString("Engineer: Issac Engineer", 5, 100, 2);
+    tft.drawString("Hardware: ESP32 + ILI9488", 5, 120, 2);
     drawBackButton();
 }
 
@@ -143,3 +154,22 @@ void changeMenu(MenuState next)
     currentMenu = next;
     drawUI();
 }
+
+// --- SYSTEM CHECKS ---
+bool checkTouchMount()
+{
+    if (!touch.begin(touchSPI)) {
+        return false;
+    } else {
+        return true;
+    }
+}
+ 
+bool checkSDMount()
+ {
+    if (!SD.begin(SD_CS, touchSPI, 16000000)) { 
+        return false;
+    } else {
+        return true;
+    }
+ }

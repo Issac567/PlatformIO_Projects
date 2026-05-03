@@ -29,21 +29,15 @@
 // SD Card not used in this project but tested with it wired with Touch Display
 
 #include <Arduino.h>
-#include <SPI.h>
-
-// TFT and Touch Pins defined in Platformio.ini!
-#define SD_CS 21
-
 #include "globals.h"
 #include "display_logic.h"
 #include "ble.h"
 
-
+// TFT and Touch Pins defined in Platformio.ini!
 
 // Define the actual objects here (Allocation)
 TFT_eSPI tft = TFT_eSPI();
 XPT2046_Touchscreen touch(TOUCH_CS, TOUCH_IRQ);
-
 SPIClass touchSPI(HSPI); 
 
 bool wasTouched = false;
@@ -53,9 +47,11 @@ void setup()
     Serial.begin(115200);
     delay(2500); // Good delay for the S3 USB Serial to catch up. Can remove if debugging not needed!
 
-    // --- IMPORTANT: QUIET THE SD CARD ---
+    // --- IMPORTANT: QUIET THE SD CARD AND TOUCH ---
     pinMode(SD_CS, OUTPUT);
-    digitalWrite(SD_CS, HIGH); // Keeps SD card inactive
+    digitalWrite(SD_CS, HIGH);      // SD Idle
+    pinMode(TOUCH_CS, OUTPUT);
+    digitalWrite(TOUCH_CS, HIGH);   // Touch Idle
 
     // 1. Initialize TFT (Uses Bus 1: FSPI)
     tft.init();
@@ -64,15 +60,24 @@ void setup()
     // 2. Initialize Touch SPI (Uses Bus 2: HSPI)
     // Make sure these names match your -D flags in platformio.ini
     touchSPI.begin(TOUCH_SCLK, TOUCH_MISO, TOUCH_MOSI, TOUCH_CS); 
-
     if (!touch.begin(touchSPI)) {
         Serial.println("Touchscreen init failed!");
     } else {
         Serial.println("Touchscreen online.");
     }
-    
     touch.setRotation(1); // Keep this matching tft.setRotation
 
+    // 3. INITIALIZE SD CARD (Pass the shared SPI) ---
+    // Note: SD.begin takes (SS_PIN, SPI_BUS, FREQUENCY)
+    if (!SD.begin(SD_CS, touchSPI, 16000000)) { // 16MHz is stable for S3
+        Serial.println("SD Card mount failed!");
+    } else {
+        Serial.println("SD Card mounted.");
+        //uint64_t cardSize = SD.cardSize() / (1024 * 1024);
+        //Serial.printf("SD Card Size: %lluMB\n", cardSize);
+    }
+
+    // 4. Draw main menu ui
     drawUI();
     
     Serial.println("Issac Engineer Go-Box Ready.");
@@ -82,16 +87,19 @@ void loop()
 {
     bool isCurrentlyTouched = touch.touched();
 
-    // Only act if it's a NEW touch
-    if (isCurrentlyTouched && !wasTouched) {
+    //-------------------------------------------------------------------------------------------------
+    // Check for touch
+    //-------------------------------------------------------------------------------------------------
+    if (isCurrentlyTouched && !wasTouched) {        // Only act if it's a NEW touch
         Serial.println("Handle Touch Pressed");
         handleTouch(); 
     }
-    
-    // Update the state
-    wasTouched = isCurrentlyTouched;
+    wasTouched = isCurrentlyTouched;                // Update the state
 
-    if (doConnect == true) 
+    //-------------------------------------------------------------------------------------------------
+    // Do connecting to server
+    //-------------------------------------------------------------------------------------------------
+    if (doConnect == true && doScan == false) 
     {
         if (bleconnectToServer()) {
             Serial.println("We are now connected to the BLE Server.");
@@ -101,6 +109,9 @@ void loop()
         }
     }
 
+    //-------------------------------------------------------------------------------------------------
+    // Do BLE scanning and find the device
+    //-------------------------------------------------------------------------------------------------
     if (!bleIsConnected() && doConnect == false && doScan == true) 
     {
         Serial.println("BLE is not connected, attempting to reconnect...");

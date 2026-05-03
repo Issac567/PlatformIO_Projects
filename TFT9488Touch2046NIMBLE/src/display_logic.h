@@ -7,10 +7,12 @@ void drawUI();
 void drawMainMenu();
 void drawFlashMenu();
 void drawBTMenu();
-void drawCalibMenu();
+void drawSystemMenu();
 void drawAboutMenu();
 void createButton(int x, int y, int w, int h, uint32_t color, const char *label);
 void drawBackButton();
 void changeMenu(MenuState next);
+bool checkTouchMount();
+bool checkSDMount();
 
 #endif

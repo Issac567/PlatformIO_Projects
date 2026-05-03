@@ -12,8 +12,6 @@ void bleDoScan();
 //extern bool
 extern bool doConnect;
 extern bool doScan;
-
-// Device + service tracking
 extern NimBLEAdvertisedDevice* myDevice;        // display_logic.cpp needs access to info
 
 #endif
