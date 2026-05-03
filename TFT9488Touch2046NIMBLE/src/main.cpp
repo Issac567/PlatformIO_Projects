@@ -97,9 +97,8 @@ void loop()
             Serial.println("We are now connected to the BLE Server.");
         } else {
             Serial.println("We have failed to connect to the server; there is nothing more we will do.");
-            // place doscan here too if using bottom route
+            doScan = true; 
         }
-        doScan = true;    // make sure to reallow it but it wont trigger when connected!  put this in onDisconnect event??
     }
 
     if (!bleIsConnected() && doConnect == false && doScan == true) 

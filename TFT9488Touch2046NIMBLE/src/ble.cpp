@@ -29,7 +29,7 @@ class MyClientCallback : public NimBLEClientCallbacks
     void onDisconnect(NimBLEClient* pClient, int reason) override
     {
         Serial.println(" - onDisconnect");
-        // maybe add doScan = true; in here?? dont trigger it in connectToServer in main loop?
+        doScan = true; 
     }
 };
 
