@@ -53,10 +53,10 @@
 
 1. Clone the repository
 2. Open in VS Code with PlatformIO
-3. Get flash.bin and config.map from B4J Uploader and place them in SD Card for testing.  Select PIC config and load intel hex file. It will automaticallycreate those required files.
+3. Get flash.bin and config.map from B4J Uploader and place them in SD Card for testing.  Select PIC config and load intel hex file. It will automatically create those required files.
 
 ---
 
 ## Note
-* You can experiment with BLE by powering on and off the HM-10 and checking the status.  Also, removing and inserting the SD Card and checking with **FLASH** button.  In the future i will include a working flash uploader for microchip.  
+* You can experiment with BLE by powering on and off the HM-10 and checking the status.  Also, removing and inserting the SD Card and checking with **FLASH** button.  In the future i will include a working flash uploader for Microchip.  
 
