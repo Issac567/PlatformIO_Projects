@@ -1,4 +1,4 @@
-#include <Arduino.h>
+
 #include "ble.h"
 
 // Shared variables (extern from header)
@@ -176,6 +176,34 @@ bool bleconnectToServer()
 }
 
 //-----------------------------------------------------------
+//connection to server
+//-----------------------------------------------------------
+void handleConnection()
+{
+    if (doConnect == true && doScan == false) 
+    {
+        if (bleconnectToServer()) {
+            Serial.println("We are now connected to the BLE Server.");
+        } else {
+            Serial.println("We have failed to connect to the server; there is nothing more we will do.");
+            doScan = true; 
+        }
+    }
+}
+
+//-----------------------------------------------------------
+//do scan continous until found
+//-----------------------------------------------------------
+void handleBleScan()
+{
+    if (!bleIsConnected() && doConnect == false && doScan == true) 
+    {
+        Serial.println("BLE is not connected, attempting to reconnect...");
+        bleDoScan();
+    }
+}
+
+//-----------------------------------------------------------
 //Setup Scan
 //-----------------------------------------------------------
 void bleDoScan() 
@@ -205,7 +233,7 @@ bool bleIsConnected()
 }
 
 //-----------------------------------------------------------
-//Call Disconnect
+//Call Disconnect (Not used yet!)
 //-----------------------------------------------------------
 void bleDisconnect()
 {
